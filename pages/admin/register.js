@@ -1,29 +1,40 @@
-// /pages/admin/register.js
-import { useState } from 'react';
-import { auth } from '../../firebase/config';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import Link from 'next/link';
 
 export default function Register() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [message, setMessage] = useState('');
-
-  const handleRegister = async () => {
-    try {
-      await createUserWithEmailAndPassword(auth, email, password);
-      setMessage("✅ Registered successfully!");
-    } catch (error) {
-      setMessage("❌ " + error.message);
-    }
-  };
-
   return (
-    <div style={{ padding: '50px' }}>
-      <h2>Register (Admin Only)</h2>
-      <input placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} />
-      <input type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} />
-      <button onClick={handleRegister}>Register</button>
-      <p>{message}</p>
+    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+      <div className="bg-white shadow-md rounded-lg p-8 max-w-md w-full">
+        <h2 className="text-2xl font-bold mb-6 text-center">🆕 Register</h2>
+        <form className="space-y-4">
+          <input
+            type="text"
+            placeholder="Full Name"
+            className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
+          />
+          <input
+            type="email"
+            placeholder="Email"
+            className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
+          />
+          <button
+            type="submit"
+            className="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700"
+          >
+            Register
+          </button>
+        </form>
+        <p className="mt-4 text-sm text-center">
+          Already have an account?{' '}
+          <Link href="/admin/login" className="text-green-600 hover:underline">
+            Login
+          </Link>
+        </p>
+      </div>
     </div>
   );
 }
