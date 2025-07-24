@@ -96,3 +96,6 @@ export default function Home() {
     </div>
   );
 }
+// Example buttons on Home
+<a href="/admin/login"><button>Admin Login</button></a>
+<a href="/admin/register"><button>Admin Register</button></a>
