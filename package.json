@@ -1,13 +1,12 @@
 {
   "name": "safibuilds",
   "version": "1.0.0",
-  "description": "SafiBuilds Website with Firebase and TailwindCSS, deployed on Netlify",
+  "description": "SafiBuilds Web App",
   "main": "index.js",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
+    "start": "next start"
   },
   "dependencies": {
     "firebase": "^10.12.1",
@@ -16,11 +15,8 @@
     "react-dom": "18.2.0"
   },
   "devDependencies": {
-    "autoprefixer": "^10.4.16",
+    "autoprefixer": "^10.4.14",
     "postcss": "^8.4.24",
-    "tailwindcss": "^3.4.1"
-  },
-  "keywords": [],
-  "author": "M Abbas Safi",
-  "license": "ISC"
+    "tailwindcss": "^3.4.3"
+  }
 }
