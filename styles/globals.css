@@ -1,5 +1,10 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-/* Optional: Your custom styles */
+@keyframes fadeIn {
+  0% { opacity: 0; transform: translateY(10px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+.animate-fadeIn {
+  animation: fadeIn 1s ease-in-out both;
+}
+.delay-200 {
+  animation-delay: 0.2s;
+}
