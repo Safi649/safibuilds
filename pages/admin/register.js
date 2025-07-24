@@ -1,48 +1,59 @@
 // pages/admin/register.js
 import { useState } from 'react';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../../firebase/config';
 import { useRouter } from 'next/router';
+import { auth } from '@/firebase/config';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
 
 export default function RegisterPage() {
+  const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const router = useRouter();
 
-  const handleRegister = async (e) => {
-    e.preventDefault();
+  // 🔐 Handle Registration
+  const handleRegister = async () => {
+    if (!email || !password) {
+      alert("Please enter both email and password.");
+      return;
+    }
+
     try {
       await createUserWithEmailAndPassword(auth, email, password);
-      router.push('/admin/dashboard');
-    } catch (err) {
-      setError('Registration failed. Try again.');
+      alert("Registration successful!");
+      router.push('/admin/dashboard'); // ⬅️ redirect after register
+    } catch (error) {
+      alert("Registration failed: " + error.message); // ❌ alert on error
     }
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <form onSubmit={handleRegister} className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
-        <h2 className="text-2xl font-bold mb-6">Register</h2>
-        {error && <p className="text-red-500 mb-4">{error}</p>}
+      <div className="bg-white p-8 rounded shadow-md w-full max-w-md">
+        <h2 className="text-2xl font-bold mb-4">🆕 Register as Admin</h2>
         <input
           type="email"
           placeholder="Email"
-          className="w-full p-3 border mb-4 rounded"
+          value={email}
           onChange={(e) => setEmail(e.target.value)}
-          required
+          className="w-full mb-4 p-2 border border-gray-300 rounded"
         />
         <input
           type="password"
-          placeholder="Password"
-          className="w-full p-3 border mb-4 rounded"
+          placeholder="Password (6+ characters)"
+          value={password}
           onChange={(e) => setPassword(e.target.value)}
-          required
+          className="w-full mb-4 p-2 border border-gray-300 rounded"
         />
-        <button type="submit" className="w-full bg-green-600 text-white p-3 rounded hover:bg-green-700">
+        <button
+          onClick={handleRegister}
+          className="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700"
+        >
           Register
         </button>
-      </form>
+        <p className="mt-4 text-sm text-center">
+          Already have an account?{" "}
+          <a href="/admin/login" className="text-blue-600 hover:underline">Login</a>
+        </p>
+      </div>
     </div>
   );
 }
