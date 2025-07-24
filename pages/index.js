@@ -1,6 +1,13 @@
 export default function Home() {
   return (
-    <div style={{ fontFamily: 'Arial, sans-serif', padding: '40px' }}>
+    <div style={{ fontFamily: 'Arial, sans-serif' }}>
+
+      {/* LOGIN/REGISTER NAVIGATION */}
+      <div style={{ padding: '15px', background: '#eaeaea', textAlign: 'right' }}>
+        <a href="/admin/login" style={{ marginRight: '15px', textDecoration: 'none', fontWeight: 'bold' }}>🔐 Admin Login</a>
+        <a href="/admin/register" style={{ textDecoration: 'none', fontWeight: 'bold' }}>🆕 Register</a>
+      </div>
+
       {/* HERO SECTION */}
       <section style={{ textAlign: 'center', padding: '60px 0' }}>
         <h1 style={{ fontSize: '40px' }}>Build Stunning Websites with SafiBuilds</h1>
