@@ -1,29 +1,36 @@
-// /pages/admin/login.js
-import { useState } from 'react';
-import { auth } from '../../firebase/config';
-import { signInWithEmailAndPassword } from 'firebase/auth';
+
+import Link from 'next/link';
 
 export default function Login() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [message, setMessage] = useState('');
-
-  const handleLogin = async () => {
-    try {
-      await signInWithEmailAndPassword(auth, email, password);
-      setMessage("✅ Login successful!");
-    } catch (error) {
-      setMessage("❌ " + error.message);
-    }
-  };
-
   return (
-    <div style={{ padding: '50px' }}>
-      <h2>Login (Admin Only)</h2>
-      <input placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} />
-      <input type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} />
-      <button onClick={handleLogin}>Login</button>
-      <p>{message}</p>
+    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+      <div className="bg-white shadow-md rounded-lg p-8 max-w-md w-full">
+        <h2 className="text-2xl font-bold mb-6 text-center">🔐 Admin Login</h2>
+        <form className="space-y-4">
+          <input
+            type="email"
+            placeholder="Email"
+            className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <button
+            type="submit"
+            className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
+          >
+            Login
+          </button>
+        </form>
+        <p className="mt-4 text-sm text-center">
+          Don't have an account?{' '}
+          <Link href="/admin/register" className="text-blue-600 hover:underline">
+            Register here
+          </Link>
+        </p>
+      </div>
     </div>
   );
 }
