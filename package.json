@@ -1,16 +1,22 @@
 {
   "name": "safibuilds",
   "version": "1.0.0",
+  "description": "SafiBuilds Website - Phase 1 + Phase 2 Setup",
+  "main": "index.js",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "lint": "next lint"
   },
   "dependencies": {
+    "firebase": "^10.12.1",
     "next": "14.2.3",
     "react": "18.2.0",
     "react-dom": "18.2.0"
-  }
+  },
+  "keywords": [],
+  "author": "M Abbas Safi",
+  "license": "ISC"
 }
-
 
