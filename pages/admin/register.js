@@ -1,7 +1,7 @@
 // pages/admin/register.js
 import { useState } from 'react';
 import { useRouter } from 'next/router';
-import { auth } from '@/firebase/config';
+import { auth } from '../../firebase/config';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 
 export default function RegisterPage() {
