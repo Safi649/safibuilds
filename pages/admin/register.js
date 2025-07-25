@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useRouter } from "next/router";
 import { createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
-import { auth, db } from '../../firebase/config';
+import { auth, db } from "../../firebase/config";
 import toast from "react-hot-toast";
 
 export default function Register() {
@@ -15,16 +15,10 @@ export default function Register() {
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      const { user } = await createUserWithEmailAndPassword(auth, email, password);
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
-await setDoc(doc(db, "users", user.uid), {
-  name: name,
-  email: email,
-  createdAt: new Date(),
-});
-
-      // 👤 Save user data to Firestore
+      // Save user data to Firestore
       await setDoc(doc(db, "users", user.uid), {
         name,
         email,
@@ -32,18 +26,21 @@ await setDoc(doc(db, "users", user.uid), {
         createdAt: new Date(),
       });
 
-      // ✉️ Send verification email
+      // Send email verification
       await sendEmailVerification(user);
       toast.success("Verification email sent. Please check your inbox.");
       router.push("/admin/login");
     } catch (error) {
-      toast.error(error.message);
+      toast.error("Registration failed: " + error.message);
     }
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
-      <form onSubmit={handleRegister} className="bg-white p-8 rounded shadow-md w-full max-w-md space-y-4">
+      <form
+        onSubmit={handleRegister}
+        className="bg-white p-8 rounded shadow-md w-full max-w-md space-y-4"
+      >
         <h2 className="text-2xl font-bold text-center">Register</h2>
 
         <input
