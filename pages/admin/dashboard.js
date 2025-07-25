@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { useRouter } from "next/router";
-import { auth, db } from "@/firebase/config";
+import { auth, db } from '../../firebase/config';
 import { doc, getDoc } from "firebase/firestore";
 import toast from "react-hot-toast";
 
