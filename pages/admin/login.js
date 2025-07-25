@@ -1,3 +1,8 @@
+import { toast } from 'react-hot-toast';
+
+// then inside your catch block or success
+toast.success("Registered successfully!");
+toast.error("Login failed: " + error.message);
 // 📁 pages/admin/login.js
 import { useState } from 'react';
 import { useRouter } from 'next/router';
