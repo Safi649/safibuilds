@@ -1,7 +1,7 @@
 // 📁 pages/admin/dashboard.js
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { auth } from '@/firebase/config';
+import { auth } from '../../firebase/config';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { toast } from 'react-hot-toast';
 
