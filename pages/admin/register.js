@@ -1,70 +1,85 @@
 // 📁 pages/admin/register.js
-import { useState } from 'react';
-import { useRouter } from 'next/router';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { doc, setDoc } from 'firebase/firestore';
-import { auth } from '../../firebase/config';
-import { toast } from 'react-hot-toast';
+import { useState } from "react";
+import { useRouter } from "next/router";
+import { createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
+import { auth, db } from "@/firebase/config";
+import toast from "react-hot-toast";
 
 export default function Register() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
   const router = useRouter();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
 
-  const handleRegister = async () => {
-    if (!email || !password) {
-      toast.error("Please fill in all fields");
-      return;
-    }
-
+  const handleRegister = async (e) => {
+    e.preventDefault();
     try {
-      const userCred = await createUserWithEmailAndPassword(auth, email, password);
+      const { user } = await createUserWithEmailAndPassword(auth, email, password);
 
-      // Save user to Firestore
-      await setDoc(doc(db, 'users', userCred.user.uid), {
-        email: userCred.user.email,
-        uid: userCred.user.uid,
-        createdAt: new Date().toISOString(),
+      // 👤 Save user data to Firestore
+      await setDoc(doc(db, "users", user.uid), {
+        name,
+        email,
+        uid: user.uid,
+        createdAt: new Date(),
       });
 
-      toast.success("Registered successfully!");
-      router.push('/admin/dashboard');
+      // ✉️ Send verification email
+      await sendEmailVerification(user);
+      toast.success("Verification email sent. Please check your inbox.");
+      router.push("/admin/login");
     } catch (error) {
-      toast.error("Registration failed: " + error.message);
+      toast.error(error.message);
     }
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
-      <div className="bg-white p-8 rounded shadow-md w-full max-w-md">
-        <h1 className="text-2xl font-bold mb-4 text-center">🆕 Register</h1>
+      <form onSubmit={handleRegister} className="bg-white p-8 rounded shadow-md w-full max-w-md space-y-4">
+        <h2 className="text-2xl font-bold text-center">Register</h2>
 
         <input
-          className="w-full p-2 border border-gray-300 rounded mb-3"
-          type="email"
-          placeholder="Enter your email"
-          onChange={(e) => setEmail(e.target.value)}
+          type="text"
+          placeholder="Full Name"
+          className="w-full px-4 py-2 border rounded"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          required
         />
 
         <input
-          className="w-full p-2 border border-gray-300 rounded mb-4"
+          type="email"
+          placeholder="Email"
+          className="w-full px-4 py-2 border rounded"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+
+        <input
           type="password"
-          placeholder="Enter your password"
+          placeholder="Password"
+          className="w-full px-4 py-2 border rounded"
+          value={password}
           onChange={(e) => setPassword(e.target.value)}
+          required
         />
 
         <button
-          onClick={handleRegister}
+          type="submit"
           className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition"
         >
-          Create Account
+          Register
         </button>
 
-        <p className="text-center mt-4 text-sm">
-          Already have an account?{' '}
-          <a href="/admin/login" className="text-blue-600 hover:underline">Login</a>
+        <p className="text-sm text-center">
+          Already have an account?{" "}
+          <a href="/admin/login" className="text-blue-600 underline">
+            Login
+          </a>
         </p>
-      </div>
+      </form>
     </div>
   );
 }
