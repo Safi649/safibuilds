@@ -2,11 +2,7 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
 import { signInWithEmailAndPassword } from "firebase/auth";
-if (!user.emailVerified) {
-  toast.error("Please verify your email before logging in.");
-  return;
-}
-import { auth, db } from '../../firebase/config';
+import { auth } from '../../firebase/config';
 import toast from "react-hot-toast";
 
 export default function Login() {
@@ -17,7 +13,8 @@ export default function Login() {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const { user } = await signInWithEmailAndPassword(auth, email, password);
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
 
       if (!user.emailVerified) {
         toast.error("Please verify your email before logging in.");
