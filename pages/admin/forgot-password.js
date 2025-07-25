@@ -1,7 +1,7 @@
 // 📁 pages/admin/forgot-password.js
 import { useState } from "react";
 import { sendPasswordResetEmail } from "firebase/auth";
-import { auth } from "@/firebase/config";
+import { auth, db } from '../../firebase/config';
 import toast from "react-hot-toast";
 
 export default function ForgotPassword() {
