@@ -103,3 +103,34 @@ export default function Home() {
     </div>
   );
 }
+// 📁 pages/index.js
+export default function Home() {
+  return (
+    <section className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-600 to-indigo-800 text-white px-4 py-20">
+      <div className="max-w-4xl text-center space-y-6">
+        <h1 className="text-4xl md:text-6xl font-bold leading-tight">
+          Build Your Dream Website <br /> Without Any Code
+        </h1>
+        <p className="text-lg md:text-xl text-blue-100">
+          SafiBuilds lets you design and launch stunning websites in minutes — for SaaS, Doctors, Restaurants, and more.
+        </p>
+
+        <div className="flex justify-center gap-4 mt-6">
+          <a
+            href="/admin/register"
+            className="bg-white text-blue-700 px-6 py-3 rounded-lg font-semibold shadow hover:bg-gray-100 transition"
+          >
+            Start Building
+          </a>
+          <a
+            href="/templates"
+            className="border border-white px-6 py-3 rounded-lg font-semibold hover:bg-white hover:text-blue-700 transition"
+          >
+            View Templates
+          </a>
+        </div>
+      </div>
+    </section>
+  );
+}
+
