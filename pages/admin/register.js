@@ -16,6 +16,13 @@ export default function Register() {
     e.preventDefault();
     try {
       const { user } = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+
+await setDoc(doc(db, "users", user.uid), {
+  name: name,
+  email: email,
+  createdAt: new Date(),
+});
 
       // 👤 Save user data to Firestore
       await setDoc(doc(db, "users", user.uid), {
