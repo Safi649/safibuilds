@@ -1,59 +1,54 @@
 // pages/admin/register.js
-import { useState } from 'react';
-import { useRouter } from 'next/router';
-import { auth } from '../../firebase/config';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { useState } from 'react'
+import { useRouter } from 'next/router'
+import { createUserWithEmailAndPassword } from 'firebase/auth'
+import { auth } from '@/firebase/config'
 
 export default function RegisterPage() {
-  const router = useRouter();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const router = useRouter()
 
-  // 🔐 Handle Registration
-  const handleRegister = async () => {
-    if (!email || !password) {
-      alert("Please enter both email and password.");
-      return;
-    }
-
+  const handleRegister = async (e) => {
+    e.preventDefault()
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
-      alert("Registration successful!");
-      router.push('/admin/dashboard'); // ⬅️ redirect after register
+      await createUserWithEmailAndPassword(auth, email, password)
+      alert('Registration successful!')
+      router.push('/admin/dashboard')
     } catch (error) {
-      alert("Registration failed: " + error.message); // ❌ alert on error
+      alert('Registration failed: ' + error.message)
     }
-  };
+  }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="bg-white p-8 rounded shadow-md w-full max-w-md">
-        <h2 className="text-2xl font-bold mb-4">🆕 Register as Admin</h2>
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className="w-full mb-4 p-2 border border-gray-300 rounded"
-        />
-        <input
-          type="password"
-          placeholder="Password (6+ characters)"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="w-full mb-4 p-2 border border-gray-300 rounded"
-        />
-        <button
-          onClick={handleRegister}
-          className="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700"
-        >
-          Register
-        </button>
-        <p className="mt-4 text-sm text-center">
-          Already have an account?{" "}
-          <a href="/admin/login" className="text-blue-600 hover:underline">Login</a>
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
+      <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-lg">
+        <h2 className="text-2xl font-bold text-center mb-6">🆕 Register</h2>
+        <form onSubmit={handleRegister}>
+          <input
+            type="email"
+            placeholder="Email"
+            className="mb-4"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            className="mb-6"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+          <button type="submit" className="btn btn-primary w-full">
+            Register
+          </button>
+        </form>
+        <p className="text-center text-sm mt-4">
+          Already have an account? <a href="/admin/login" className="text-blue-600">Login</a>
         </p>
       </div>
     </div>
-  );
+  )
 }
