@@ -1,86 +1,68 @@
+// 📁 pages/admin/register.js
+import { useState } from 'react';
+import { useRouter } from 'next/router';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { doc, setDoc } from 'firebase/firestore';
+import { auth, db } from '@/firebase/config';
 import { toast } from 'react-hot-toast';
-
-// then inside your catch block or success
-toast.success("Registered successfully!");
-toast.error("Login failed: " + error.message);
-import { useState } from "react";
-import { useRouter } from "next/router";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { doc, setDoc } from "firebase/firestore";
-import { auth, db } from "@/firebase/config";
-import toast, { Toaster } from "react-hot-toast";
 
 export default function Register() {
   const router = useRouter();
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
-  const handleRegister = async (e) => {
-    e.preventDefault();
-    if (!name || !email || !password) {
-      toast.error("Please fill all fields");
+  const handleRegister = async () => {
+    if (!email || !password) {
+      toast.error("Please fill in all fields");
       return;
     }
 
     try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      const user = userCredential.user;
+      const userCred = await createUserWithEmailAndPassword(auth, email, password);
 
       // Save user to Firestore
-      await setDoc(doc(db, "users", user.uid), {
-        uid: user.uid,
-        name,
-        email,
-        createdAt: new Date()
+      await setDoc(doc(db, 'users', userCred.user.uid), {
+        email: userCred.user.email,
+        uid: userCred.user.uid,
+        createdAt: new Date().toISOString(),
       });
 
-      toast.success("Registration successful!");
-      router.push("/admin/dashboard");
+      toast.success("Registered successfully!");
+      router.push('/admin/dashboard');
     } catch (error) {
-      toast.error("Error: " + error.message);
+      toast.error("Registration failed: " + error.message);
     }
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
-      <Toaster />
-      <div className="max-w-md w-full bg-white p-8 rounded shadow">
-        <h2 className="text-2xl font-bold mb-6 text-center">🆕 Create Account</h2>
-        <form onSubmit={handleRegister} className="space-y-4">
-          <input
-            type="text"
-            placeholder="Full Name"
-            className="w-full border p-2 rounded"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
-          <input
-            type="email"
-            placeholder="Email"
-            className="w-full border p-2 rounded"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          <input
-            type="password"
-            placeholder="Password"
-            className="w-full border p-2 rounded"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          <button
-            type="submit"
-            className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700"
-          >
-            Register
-          </button>
-        </form>
-        <p className="mt-4 text-center text-sm">
-          Already have an account?{" "}
-          <a href="/admin/login" className="text-blue-600 underline">
-            Login
-          </a>
+      <div className="bg-white p-8 rounded shadow-md w-full max-w-md">
+        <h1 className="text-2xl font-bold mb-4 text-center">🆕 Register</h1>
+
+        <input
+          className="w-full p-2 border border-gray-300 rounded mb-3"
+          type="email"
+          placeholder="Enter your email"
+          onChange={(e) => setEmail(e.target.value)}
+        />
+
+        <input
+          className="w-full p-2 border border-gray-300 rounded mb-4"
+          type="password"
+          placeholder="Enter your password"
+          onChange={(e) => setPassword(e.target.value)}
+        />
+
+        <button
+          onClick={handleRegister}
+          className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition"
+        >
+          Create Account
+        </button>
+
+        <p className="text-center mt-4 text-sm">
+          Already have an account?{' '}
+          <a href="/admin/login" className="text-blue-600 hover:underline">Login</a>
         </p>
       </div>
     </div>
