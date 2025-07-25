@@ -1,60 +1,52 @@
-// pages/admin/dashboard.js
+// 📁 pages/admin/dashboard.js
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { auth } from '../../firebase/config';
+import { auth } from '@/firebase/config';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
+import { toast } from 'react-hot-toast';
 
 export default function Dashboard() {
   const router = useRouter();
   const [user, setUser] = useState(null);
 
-  // 🔒 Protect route
+  // ✅ Protect route
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      if (currentUser) {
-        setUser(currentUser);
+      if (!currentUser) {
+        toast.error("You must be logged in!");
+        router.push('/admin/login');
       } else {
-        router.push('/admin/login'); // redirect to login if not authenticated
+        setUser(currentUser);
       }
     });
 
-    return () => unsubscribe();
-  }, [router]);
+    return () => unsubscribe(); // cleanup listener
+  }, []);
 
-  // 🚪 Handle logout
   const handleLogout = async () => {
-    await signOut(auth);
-    alert("Logged out successfully");
-    router.push('/admin/login');
+    try {
+      await signOut(auth);
+      toast.success("Logged out!");
+      router.push('/admin/login');
+    } catch (error) {
+      toast.error("Logout failed: " + error.message);
+    }
   };
 
+  if (!user) return null; // ⏳ loading state
+
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
-      <div className="max-w-3xl mx-auto bg-white rounded-lg shadow-lg p-6">
-        <h1 className="text-3xl font-bold mb-4">👋 Welcome to SafiBuilds Admin Dashboard</h1>
-        {user && (
-          <p className="text-gray-700 mb-6">
-            Logged in as <span className="font-semibold">{user.email}</span>
-          </p>
-        )}
-
-        <div className="flex gap-4">
-          <button
-            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-            onClick={() => alert('Add more dashboard features here!')}
-          >
-            ➕ Add Content
-          </button>
-
-          <button
-            className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
-            onClick={handleLogout}
-          >
-            🚪 Logout
-          </button>
-        </div>
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
+      <div className="bg-white p-8 rounded shadow-md w-full max-w-lg text-center">
+        <h1 className="text-3xl font-bold mb-4">👋 Welcome, Admin!</h1>
+        <p className="mb-6">You're logged in as <strong>{user.email}</strong></p>
+        <button
+          onClick={handleLogout}
+          className="bg-red-600 text-white px-6 py-2 rounded hover:bg-red-700 transition"
+        >
+          Logout
+        </button>
       </div>
     </div>
   );
 }
-
