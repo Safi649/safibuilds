@@ -1,17 +1,16 @@
-import { Toaster } from 'react-hot-toast';
+// pages/_app.js
 
-function App({ Component, pageProps }) {
+import '../styles/globals.css'; // TailwindCSS global styles
+import { Toaster } from 'react-hot-toast'; // Toast notifications
+
+export default function App({ Component, pageProps }) {
   return (
     <>
-      <Toaster position="top-center" />
+      {/* Global Toasts */}
+      <Toaster position="top-center" reverseOrder={false} />
+
+      {/* Load current page */}
       <Component {...pageProps} />
     </>
   );
-}
-export default App;
-// pages/_app.js
-import '../styles/globals.css'
-
-export default function App({ Component, pageProps }) {
-  return <Component {...pageProps} />
 }
