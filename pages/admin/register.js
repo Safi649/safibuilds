@@ -1,54 +1,83 @@
-// pages/admin/register.js
-import { useState } from 'react'
-import { useRouter } from 'next/router'
-import { createUserWithEmailAndPassword } from 'firebase/auth'
-import { auth } from '@/firebase/config'
+import { useState } from "react";
+import { useRouter } from "next/router";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
+import { auth, db } from "@/firebase/config";
+import toast, { Toaster } from "react-hot-toast";
 
-export default function RegisterPage() {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const router = useRouter()
+export default function Register() {
+  const router = useRouter();
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const handleRegister = async (e) => {
-    e.preventDefault()
-    try {
-      await createUserWithEmailAndPassword(auth, email, password)
-      alert('Registration successful!')
-      router.push('/admin/dashboard')
-    } catch (error) {
-      alert('Registration failed: ' + error.message)
+    e.preventDefault();
+    if (!name || !email || !password) {
+      toast.error("Please fill all fields");
+      return;
     }
-  }
+
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+
+      // Save user to Firestore
+      await setDoc(doc(db, "users", user.uid), {
+        uid: user.uid,
+        name,
+        email,
+        createdAt: new Date()
+      });
+
+      toast.success("Registration successful!");
+      router.push("/admin/dashboard");
+    } catch (error) {
+      toast.error("Error: " + error.message);
+    }
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
-      <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-lg">
-        <h2 className="text-2xl font-bold text-center mb-6">🆕 Register</h2>
-        <form onSubmit={handleRegister}>
+      <Toaster />
+      <div className="max-w-md w-full bg-white p-8 rounded shadow">
+        <h2 className="text-2xl font-bold mb-6 text-center">🆕 Create Account</h2>
+        <form onSubmit={handleRegister} className="space-y-4">
+          <input
+            type="text"
+            placeholder="Full Name"
+            className="w-full border p-2 rounded"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
           <input
             type="email"
             placeholder="Email"
-            className="mb-4"
+            className="w-full border p-2 rounded"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            required
           />
           <input
             type="password"
             placeholder="Password"
-            className="mb-6"
+            className="w-full border p-2 rounded"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            required
           />
-          <button type="submit" className="btn btn-primary w-full">
+          <button
+            type="submit"
+            className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700"
+          >
             Register
           </button>
         </form>
-        <p className="text-center text-sm mt-4">
-          Already have an account? <a href="/admin/login" className="text-blue-600">Login</a>
+        <p className="mt-4 text-center text-sm">
+          Already have an account?{" "}
+          <a href="/admin/login" className="text-blue-600 underline">
+            Login
+          </a>
         </p>
       </div>
     </div>
-  )
+  );
 }
