@@ -2,6 +2,10 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
 import { signInWithEmailAndPassword } from "firebase/auth";
+if (!user.emailVerified) {
+  toast.error("Please verify your email before logging in.");
+  return;
+}
 import { auth, db } from '../../firebase/config';
 import toast from "react-hot-toast";
 
