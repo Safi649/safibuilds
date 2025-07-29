@@ -27,7 +27,7 @@ export default function Home() {
         </div>
       </header>
 
-      {/* ✨ Hero Section (same as before) */}
+      {/* ✨ Hero Section */}
       <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-8 items-center">
         <motion.div
           initial={{ opacity: 0, x: -60 }}
@@ -36,24 +36,24 @@ export default function Home() {
           className="space-y-6"
         >
           <h1 className="text-4xl md:text-6xl font-bold leading-tight">
-            Build Your Dream Website <br /> Without Any Code
+            Build Beautiful Websites <br /> Without Writing Code
           </h1>
           <p className="text-lg md:text-xl text-blue-100">
-            SafiBuilds lets you design and launch stunning websites in minutes — for SaaS, Doctors, Restaurants, and more.
+            SafiBuilds is your all-in-one platform to design and launch websites effortlessly — perfect for SaaS, Doctors, Restaurants, and more. Choose from 100+ templates.
           </p>
 
-          <div className="flex gap-4">
+          <div className="flex gap-4 flex-wrap">
             <a
               href="/admin/register"
               className="bg-white text-blue-700 px-6 py-3 rounded-lg font-semibold shadow hover:bg-gray-100 transition"
             >
-              Start Building
+              Get Started Free
             </a>
             <a
               href="/templates"
               className="border border-white px-6 py-3 rounded-lg font-semibold hover:bg-white hover:text-blue-700 transition"
             >
-              View Templates
+              View Templates →
             </a>
           </div>
         </motion.div>
@@ -65,7 +65,7 @@ export default function Home() {
           className="flex justify-center"
         >
           <img
-            src="/illustration.svg"
+            src="/illustration.svg" // Place this in /public
             alt="Website Builder Illustration"
             className="w-full max-w-sm md:max-w-md"
           />
@@ -76,7 +76,12 @@ export default function Home() {
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut", repeatType: "reverse" }}
+        transition={{
+          repeat: Infinity,
+          duration: 1.5,
+          ease: "easeInOut",
+          repeatType: "reverse"
+        }}
         className="absolute bottom-6 left-1/2 transform -translate-x-1/2 text-white text-xl"
       >
         <FaChevronDown />
